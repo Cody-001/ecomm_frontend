@@ -10,7 +10,7 @@ const AdminLogin = () => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value })
   }
 
-  const adminlogin = async () => {
+  const adminLogin = async () => {
   let responseData;
   await fetch("http://localhost:3000/adminlogin", {
     method: "POST",
@@ -52,7 +52,7 @@ const AdminLogin = () => {
           />
         </div>
 
-        <button onClick={adminlogin}>Continue</button>
+        <button onClick={adminLogin}>Continue</button>
 
         <div className="loginsign-agree">
           <input type="checkbox" />
