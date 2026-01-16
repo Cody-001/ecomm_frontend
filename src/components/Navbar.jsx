@@ -1,3 +1,4 @@
+import React from 'react'
 import logo from '../Assets/Frontend_Assets/logo.png'
 import cart_icon from '../Assets/Frontend_Assets/cart_icon.png'
 import { useContext, useState } from 'react'

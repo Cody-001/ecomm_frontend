@@ -1,3 +1,4 @@
+import React from 'react'
 const Subcategory = ({ onSelectSubcategory, selectedSubcategory }) => {
   return (
     <div className="subCategory">
