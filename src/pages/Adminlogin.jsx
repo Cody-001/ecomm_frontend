@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Adminlogin = () => {
+const AdminLogin = () => {
   const [formdata, setFormdata] = useState({
     email: "",
     password: ""
@@ -63,4 +63,4 @@ const Adminlogin = () => {
   )
 }
 
-export default Adminlogin
+export default AdminLogin
