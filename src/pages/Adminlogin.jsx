@@ -12,7 +12,7 @@ const Adminlogin = () => {
 
   const adminlogin = async () => {
   let responseData;
-  await fetch("http://localhost:3000/adminlogin", {
+  await fetch(`${process.env.REACT_APP_API_URL}/adminlogin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formdata),
@@ -22,7 +22,7 @@ const Adminlogin = () => {
 
   if (responseData.success) {
     localStorage.setItem("admin-token", responseData.token);
-    window.location.href = "http://localhost:5173/addproduct"; // admin app URL
+    window.location.href = `${process.env.REACT_APP_API_URL}/addproduct`; // admin app URL
   } else {
     alert(responseData.error);
   }

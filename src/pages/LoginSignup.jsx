@@ -16,7 +16,7 @@ const LoginSignup = () => {
   const login = async ()=>{
     console.log("executed login", formdata)
     let responseData;
-     await fetch("http://localhost:3000/login",{
+     await fetch(`${process.env.REACT_APP_API_URL}/login`,{
       method: "POST",
       headers:{
         Accept: "application/json",
@@ -37,7 +37,7 @@ const LoginSignup = () => {
   const signup = async ()=>{
      console.log("executed signup", formdata)
      let responseData;
-     await fetch("http://localhost:3000/signup",{
+     await fetch(`${process.env.REACT_APP_API_URL}/signup`,{
       method: "POST",
       headers:{
         Accept: "application/json",
