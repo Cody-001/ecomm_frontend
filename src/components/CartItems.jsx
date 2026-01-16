@@ -5,7 +5,7 @@ import Footer from './Footer'
 import Navbar from './Navbar'
 
 const CartItems = () => {
-    const {getTotalCartAmount, all_product, cartItems, removeCart } = useContext(ShopContext)
+    const {getTotalCartAmount, allproduct, cartItems, removeCart } = useContext(ShopContext)
     return (
         <>
         <Navbar />
@@ -21,7 +21,7 @@ const CartItems = () => {
 
             </div>
             <hr />
-            {all_product.map((e) => {
+            {allproduct.map((e) => {
                 if (cartItems[e.id] > 0) {
                     return <div key={e.id}>
                         <div className='cartitems-format cartItems-format-main'>
