@@ -5,10 +5,10 @@ import ShopCategory from './pages/ShopCategory'
 import Products from './pages/Products'
 import Cart from './pages/Cart'
 import LoginSignup from './pages/LoginSignup'
-import AdminLogin from './pages/AdminLogin'
 import men_banner from "./Assets/Frontend_Assets/banner_mens.png"
 import women_banner from "./Assets/Frontend_Assets/banner_women.png"
 import kid_banner from "./Assets/Frontend_Assets/banner_kids.png"
+import Adminlogin from './pages/AdminLogin'
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
       </Route>
 
       
-      <Route path="/adminlogin" element={<AdminLogin />}/>
+      <Route path="/adminlogin" element={<Adminlogin />}/>
       <Route path='/cart' element={<Cart />} />
       <Route path='/login' element={<LoginSignup />} />
       <Route path='/admin-login' element={<AdminLogin />} />
