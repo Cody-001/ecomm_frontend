@@ -1,109 +1,109 @@
-import React, { createContext, useState } from 'react'
-import all_product from '../Assets/Frontend_Assets/all_product'
-import Cart from '../pages/Cart';
-import { useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
- export const ShopContext = createContext(null) 
- 
-    const getDefaultCart = ()=>{
-        let cart = {};
-        for(let index = 0; index < 300+1; index++){
-            cart[index] =0
+export const ShopContext = createContext(null);
+
+const getDefaultCart = () => {
+  let cart = {};
+  for (let index = 0; index < 300 + 1; index++) {
+    cart[index] = 0;
+  }
+  return cart;
+};
+
+const ShopContextProvider = (props) => {
+  const [allProduct, setAllProduct] = useState([]);
+  const [cartItems, setCartItems] = useState(getDefaultCart());
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    fetch(`${API_URL}/allproducts`)
+      .then((resp) => resp.json())
+      .then((data) => setAllProduct(data))
+      .catch((err) => console.error("Failed to fetch all products:", err));
+
+    if (localStorage.getItem("auth-token")) {
+      fetch(`${API_URL}/getcart`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      })
+        .then((resp) => resp.json())
+        .then((data) => setCartItems(data))
+        .catch((err) => console.error("Failed to fetch cart:", err));
+    }
+  }, [API_URL]);
+
+  const addCart = (itemId) => {
+    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+    if (localStorage.getItem("auth-token")) {
+      fetch(`${API_URL}/addtocart`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemid: itemId }),
+      })
+        .then((resp) => resp.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.error("Failed to add to cart:", err));
+    }
+  };
+
+  const removeCart = (itemId) => {
+    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    if (localStorage.getItem("auth-token")) {
+      fetch(`${API_URL}/removefromcart`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemid: itemId }),
+      })
+        .then((resp) => resp.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.error("Failed to remove from cart:", err));
+    }
+  };
+
+  const getTotalCartAmount = () => {
+    let totalAmount = 0;
+    for (const item in cartItems) {
+      if (cartItems[item] > 0) {
+        let itemInfo = allProduct.find((product) => product.id === Number(item));
+        if (itemInfo) {
+          totalAmount += itemInfo.new_price * cartItems[item];
         }
-        return cart;
+      }
     }
- const ShopContextProvider =(props) => {
-    const [all_product, setAll_product] =useState([])
-    const [cartItems, setCartItems] = useState(getDefaultCart())
-    
-   useEffect(()=>{
-    fetch("http://localhost:3000/allproducts")
-    .then((resp)=>resp.json())
-    .then((data)=>setAll_product(data))
+    return totalAmount;
+  };
 
-    if(localStorage.getItem("auth-token")){
-        fetch("http://localhost:3000/getcart",{
-            method: "POST",
-            headers: {
-                Accept: "application/form-data",
-                "auth-token": `${localStorage.getItem("auth-token")}`,
-                "Content-Type": "application/json"
-
-            },
-            body: "",
-        }).then((resp)=>resp.json())
-        .then((data)=>setCartItems(data))
+  const getTotalCart = () => {
+    let totalItem = 0;
+    for (const item in cartItems) {
+      if (cartItems[item] > 0) {
+        totalItem += cartItems[item];
+      }
     }
-   }, [])
+    return totalItem;
+  };
 
-    const addCart = (itemId)=>{
-        setCartItems((prev)=>({...prev, [itemId]: prev[itemId]+1}))
-        if(localStorage.getItem("auth-token")){
+  const contextValue = { getTotalCart, getTotalCartAmount, allProduct, cartItems, addCart, removeCart };
 
-            fetch("http://localhost:3000/addtocart",{
-                method: "POST",
-                headers: {
-                     Accept: "application/json",
-                "auth-token":`${localStorage.getItem(("auth-token"))}`,
-                    "Content-Type":"application/json"   
-                },
-                body:JSON.stringify({"itemid": itemId})
-            }
+  return (
+    <ShopContext.Provider value={contextValue}>
+      {props.children}
+    </ShopContext.Provider>
+  );
+};
 
-            )
-            .then((resp)=>resp.json())
-            .then((data)=>console.log(data))
-        }
-    }
-    const removeCart = (itemId)=>{
-        setCartItems((prev)=>({...prev, [itemId]: prev[itemId]-1}))
-        if(localStorage.getItem("auth-token")){
-            fetch("http://localhost:3000/removefromcart",{
-                method: "POST",
-                headers: {
-                     Accept: "application/json",
-                "auth-token":`${localStorage.getItem(("auth-token"))}`,
-                    "Content-Type":"application/json"   
-                },
-                body:JSON.stringify({"itemid": itemId})
-            }
-
-            )
-            .then((resp)=>resp.json())
-            .then((data)=>console.log(data))
-        }
-        
-    }
-
-    const getTotalCartAmount =()=>{
-        let totalAmount = 0;
-        for(const item in cartItems){
-            if(cartItems[item]>0){
-                let itemIfo = all_product.find((product)=>product.id ===Number(item))
-            totalAmount += itemIfo.new_price * cartItems[item]
-            }
-            
-        }
-        return totalAmount;
-    }
-    const getTotalCart = ()=>{
-        let totalitem = 0;
-        for(const item in cartItems){
-            if(cartItems[item]>0){
-                totalitem += cartItems[item]
-            }
-            
-        }
-        return totalitem
-    }
-
-
-    const  contextValue = {getTotalCart, getTotalCartAmount, all_product, cartItems, addCart, removeCart};
-    return (
-        <ShopContext.Provider value={contextValue}>
-            {props.children}
-        </ShopContext.Provider>
-    )
-}
-
-export default ShopContextProvider
+export default ShopContextProvider;
