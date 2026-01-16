@@ -1,3 +1,4 @@
+jsx
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 
@@ -6,11 +7,11 @@ const LoginSignup = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const login = async () => {
     setLoading(true);
@@ -27,12 +28,13 @@ const LoginSignup = () => {
 
       if (data.success) {
         localStorage.setItem("auth-token", data.token);
-        window.location.replace("/");  // Relative path for internal navigation
+        window.location.replace("/");
       } else {
         alert(data.error || "Login failed. Please check your credentials.");
       }
     } catch (error) {
       alert("Network error. Please try again later.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -59,6 +61,7 @@ const LoginSignup = () => {
       }
     } catch (error) {
       alert("Network error. Please try again later.");
+      console.error(error);
     } finally {
       setLoading(false);
     }

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const adminLogin = async () => {
     setLoading(true);
@@ -22,12 +22,14 @@ const AdminLogin = () => {
 
       if (data.success) {
         localStorage.setItem("admin-token", data.token);
-        window.location.href = "/addproduct";  // Relative path for internal navigation
+        // Use relative path for redirect to work in any environment
+        window.location.href = "/addproduct";
       } else {
-        alert(data.error || "Login failed. Please check your credentials.");
+        alert(data.error || "Login failed");
       }
     } catch (error) {
       alert("Network error. Please try again later.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -56,7 +58,7 @@ const AdminLogin = () => {
           />
         </div>
         <button onClick={adminLogin} disabled={loading}>
-          {loading ? "Logging in..." : "Continue"}
+          {loading ? "Please wait..." : "Continue"}
         </button>
         <div className="loginsign-agree">
           <input type="checkbox" disabled={loading} />

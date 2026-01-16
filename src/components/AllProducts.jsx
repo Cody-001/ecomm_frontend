@@ -2,27 +2,34 @@ import React, { useState, useEffect } from 'react';
 import Items from './Items';
 
 const AllProducts = () => {
-  const [all_Product, setAllProduct] = useState([]);
+  const [allProduct, setAllProduct] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch("http://localhost:3000/allproducts")
+    fetch(`${API_URL}/allproducts`)
       .then((resp) => resp.json())
       .then((data) => setAllProduct(data))
       .catch((err) => console.error("Error fetching products:", err));
-  }, []);
+  }, [API_URL]);
 
   return (
-    <div className='allProducts'>
+    <div className="allProducts">
       <h1>COLLECTION</h1>
       <hr />
       <div className="all-products">
-        {all_Product.map((items, index) => {
-          return <Items key={index} id={items.id} name={items.name} image={items.image} new_price={items.new_price} old_price={items.old_price} />
-        })}
+        {allProduct.map((item, index) => (
+          <Items
+            key={item.id || index}
+            id={item.id}
+            name={item.name}
+            image={item.image}
+            new_price={item.new_price}
+            old_price={item.old_price}
+          />
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default AllProducts;
-

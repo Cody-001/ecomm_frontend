@@ -17,17 +17,19 @@ const ShopContextProvider = (props) => {
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
+    // Fetch all products
     fetch(`${API_URL}/allproducts`)
       .then((resp) => resp.json())
       .then((data) => setAllProduct(data))
       .catch((err) => console.error("Failed to fetch all products:", err));
 
+    // Fetch cart if user is authenticated
     if (localStorage.getItem("auth-token")) {
       fetch(`${API_URL}/getcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "auth-token": localStorage.getItem("auth-token"),
           "Content-Type": "application/json",
         },
         body: JSON.stringify({}),
@@ -40,12 +42,13 @@ const ShopContextProvider = (props) => {
 
   const addCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+
     if (localStorage.getItem("auth-token")) {
       fetch(`${API_URL}/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "auth-token": localStorage.getItem("auth-token"),
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemid: itemId }),
@@ -58,12 +61,13 @@ const ShopContextProvider = (props) => {
 
   const removeCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+
     if (localStorage.getItem("auth-token")) {
       fetch(`${API_URL}/removefromcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "auth-token": localStorage.getItem("auth-token"),
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemid: itemId }),
@@ -78,7 +82,7 @@ const ShopContextProvider = (props) => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = allProduct.find((product) => product.id === Number(item));
+        const itemInfo = allProduct.find((product) => product.id === Number(item));
         if (itemInfo) {
           totalAmount += itemInfo.new_price * cartItems[item];
         }
@@ -97,7 +101,14 @@ const ShopContextProvider = (props) => {
     return totalItem;
   };
 
-  const contextValue = { getTotalCart, getTotalCartAmount, allProduct, cartItems, addCart, removeCart };
+  const contextValue = {
+    getTotalCart,
+    getTotalCartAmount,
+    allProduct,
+    cartItems,
+    addCart,
+    removeCart,
+  };
 
   return (
     <ShopContext.Provider value={contextValue}>
