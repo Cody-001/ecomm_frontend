@@ -8,10 +8,10 @@ import Footer from '../components/Footer'
 
 
 const ShopCategory = (props) => {
-  const { all_product } = useContext(ShopContext);
+  const { allProduct } = useContext(ShopContext);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
 
-  const filteredProducts = all_product.filter(item => 
+  const filteredProducts = allProduct.filter(item => 
     props.category === item.category && 
     (selectedSubcategory ? item.subcategory === selectedSubcategory : true)
   );
