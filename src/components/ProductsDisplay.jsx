@@ -8,11 +8,6 @@ import { ShopContext } from '../contexts/ShopContext';
 const ProductsDisplay = (props) => {
     const {product} =props;
     const {addCart} = useContext(ShopContext)
-  if (!product) {
-    return <div>Loading product...</div>;
-  }
-
-
   return (
     <>
     <Navbar/>
