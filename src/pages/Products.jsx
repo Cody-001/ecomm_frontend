@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom'
 import ProductsDisplay from '../components/ProductsDisplay'
 
 const Products = () => {
-  const {all_product} = useContext(ShopContext)
+  const {allProduct} = useContext(ShopContext)
   const {productId} = useParams()
-  const product = all_product.find((e)=>e.id === Number(productId))
+  const product = allProduct.find((e)=>e.id === Number(productId))
   return (
     <div>
       <ProductsDisplay product={product}/>
