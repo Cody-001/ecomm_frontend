@@ -23,7 +23,7 @@ const LoginAdmin = () => {
         if (data.success) {
           localStorage.setItem("admin-token", data.token);
           // Use relative path for redirect to work in any environment
-          window.location.href = window.open("https://ecomm-admin-epi2.onrender.com/", "_blank") ;
+          window.open("https://ecomm-admin-epi2.onrender.com/", "_blank") ;
         } else {
           alert(data.error || "Login failed");
         }
