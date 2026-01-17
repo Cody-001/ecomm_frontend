@@ -23,7 +23,7 @@ const LoginAdmin = () => {
         if (data.success) {
           localStorage.setItem("admin-token", data.token);
           // Use relative path for redirect to work in any environment
-          window.location.href = "/addproduct";
+          window.location.href = `${API_URL}/admin`;
         } else {
           alert(data.error || "Login failed");
         }
