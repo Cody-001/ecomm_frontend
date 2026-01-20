@@ -10,6 +10,7 @@ import men_banner from "./Assets/Frontend_Assets/banner_mens.png"
 import women_banner from "./Assets/Frontend_Assets/banner_women.png"
 import kid_banner from "./Assets/Frontend_Assets/banner_kids.png"
 import LoginAdmin from './pages/LoginAdmin'
+import Order from './components/Order'
 
 
 
@@ -34,6 +35,7 @@ function App() {
       <Route path="/adminlogin" element={<LoginAdmin />}/>
       <Route path='/cart' element={<Cart />} />
       <Route path='/login' element={<LoginSignup />} />
+      <Route path='/order' element={<Order/>}/>
 
     </Routes>
    

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+
 export const ShopContext = createContext(null);
 
 const getDefaultCart = () => {
@@ -21,6 +22,7 @@ const ShopContextProvider = (props) => {
     fetch(`${API_URL}/allproducts`)
       .then((resp) => resp.json())
       .then((data) => setAllProduct(data))
+     
       .catch((err) => console.error("Failed to fetch all products:", err));
 
     // Fetch cart if user is authenticated
@@ -51,7 +53,7 @@ const ShopContextProvider = (props) => {
           "auth-token": localStorage.getItem("auth-token"),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ itemid: itemId }),
+        body: JSON.stringify({ itemId: itemId }),
       })
         .then((resp) => resp.json())
         .then((data) => console.log(data))

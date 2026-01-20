@@ -3,6 +3,9 @@ import { ShopContext } from '../contexts/ShopContext'
 import removecart from "../Assets/Frontend_Assets/cart_cross_icon.png"
 import Footer from './Footer'
 import Navbar from './Navbar'
+import { Link } from 'react-router-dom';
+ const API_URL = import.meta.env.VITE_API_URL;
+
 
 const CartItems = () => {
     const {getTotalCartAmount, allProduct, cartItems, removeCart } = useContext(ShopContext)
@@ -25,7 +28,7 @@ const CartItems = () => {
                 if (cartItems[e.id] > 0) {
                     return <div key={e.id}>
                         <div className='cartitems-format cartItems-format-main'>
-                            <img src={e.image} alt="" className='carticon-product-icon' />
+                            <img src={e.image || "/placeholder.png"} alt={e.name} className='carticon-product-icon' />
                             <p>{e.name}</p>
                             <p>${e.new_price}</p>
                             <button className='cartitems-quantity'>{cartItems[e.id]}</button>
@@ -55,7 +58,9 @@ const CartItems = () => {
                             <h3>total</h3>
                             <h3>${getTotalCartAmount()}</h3>
                         </div>
-                        <button>PROCEED TO CHECKOUT</button>
+                       <Link to="/order">
+  <button className='checkout-page'>PROCEED TO CHECKOUT</button>
+</Link>
                     </div>
                 </div>
             </div>
