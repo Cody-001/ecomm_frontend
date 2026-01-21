@@ -41,6 +41,7 @@ const CartItems = () => {
             <div className="cartItems-format-main" key={index}>
               <img
                 src={product.image || "/placeholder.png"}
+                loading="lazy"
                 alt={product.name}
                 className="carticon-product-icon"
                 style={{ width: "80px", height: "80px", objectFit: "cover" }}

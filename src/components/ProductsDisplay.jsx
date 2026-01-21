@@ -27,23 +27,23 @@ const ProductsDisplay = (props) => {
             <div className='productDisplay'>
                 <div className="productDisplay-left">
                     <div className="produtdisplay-img-list">
-                        <img src={product.image || "/placeholder.png"} />
-                        <img src={product.image || "/placeholder.png"} />
-                        <img src={product.image || "/placeholder.png"} />
-                        <img src={product.image || "/placeholder.png"} />
+                        <img loading="lazy" src={product.image || "/placeholder.png"} />
+                        <img loading="lazy" src={product.image || "/placeholder.png"} />
+                        <img loading="lazy" src={product.image || "/placeholder.png"} />
+                        <img loading="lazy" src={product.image || "/placeholder.png"} />
                     </div>
                     <div className="productdisplay-img">
-                        <img className='productdisplay-main-img' src={product.image || "/placeholder.png"} />
+                        <img loading="lazy" className='productdisplay-main-img' src={product.image || "/placeholder.png"} />
                     </div>
                 </div>
                 <div className="productDisplay-right">
                     <h1>{product.name}</h1>
                     <div className="productdispaly-right-star">
-                        <img src={star_icon} alt="" />
-                        <img src={star_icon} alt="" />
-                        <img src={star_icon} alt="" />
-                        <img src={star_icon} alt="" />
-                        <img src={star_dull_icon} alt="" />
+                        <img loading="lazy" src={star_icon} alt="" />
+                        <img loading="lazy" src={star_icon} alt="" />
+                        <img loading="lazy" src={star_icon} alt="" />
+                        <img loading="lazy" src={star_icon} alt="" />
+                        <img loading="lazy" src={star_dull_icon} alt="" />
                         <p>(122)</p>
                     </div>
                     <div className="productdisplay-right-prices">
