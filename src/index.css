@@ -496,7 +496,21 @@ gap: 16px;
   color: #fff;
 }
 
+.min-screen-icon img{
+    background-color: black;
+    padding: 5px;
+    border-radius: 10px;
+    display: none;
+}
 
+@media(max-width : 1000px){
+   .navbar ul{
+        display: none;
+    }
+    .min-screen-icon img{
+        display: block;
+    }
+}
 
 
 

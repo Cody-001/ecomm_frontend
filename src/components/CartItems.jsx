@@ -1,26 +1,24 @@
-import React, { useContext } from 'react'
-import { ShopContext } from '../contexts/ShopContext'
-import removecart from "../Assets/Frontend_Assets/cart_cross_icon.png"
-import Footer from './Footer'
-import Navbar from './Navbar'
-import { Link } from 'react-router-dom'
+import React, { useContext } from "react";
+import { ShopContext } from "../contexts/ShopContext";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
 const CartItems = () => {
   const {
     getTotalCartAmount,
     allProduct,
     cartItems,
-    removeCart
-  } = useContext(ShopContext)
+    removeCart,
+  } = useContext(ShopContext);
 
-
-  const cartArray = Object.values(cartItems || {})
+  const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
 
   return (
     <>
       <Navbar />
 
-      <div className='cartItems'>
+      <div className="cartItems">
         <div className="cartItems-format-main">
           <p>Product</p>
           <p>Title</p>
@@ -33,8 +31,12 @@ const CartItems = () => {
 
         <hr />
 
-        {cartItems.map((item, index) => {
-          const product = allProduct.find(p => p.id === item.id);
+        {safeCartItems.length === 0 && (
+          <p style={{ padding: "20px" }}>Your cart is empty.</p>
+        )}
+
+        {safeCartItems.map((item, index) => {
+          const product = allProduct.find((p) => p.id === item.id);
           if (!product) return null;
 
           return (
@@ -46,14 +48,26 @@ const CartItems = () => {
                 className="carticon-product-icon"
                 style={{ width: "80px", height: "80px", objectFit: "cover" }}
               />
+
               <p>{product.name}</p>
               <p>${product.new_price}</p>
               <p>Qty: {item.quantity}</p>
-              <p><span>Size: {item.size}</span> <br />
-               <span>Color: {item.color}</span>
-               </p>
-              <p>Total: ${product.new_price * item.quantity}</p>
-              <button onClick={() => removeCart(item.id, item.size, item.color)}>Remove</button>
+
+              <p>
+                <span>Size: {item.size}</span>
+                <br />
+                <span>Color: {item.color}</span>
+              </p>
+
+              <p>${product.new_price * item.quantity}</p>
+
+              <button
+                onClick={() =>
+                  removeCart(item.id, item.size, item.color)
+                }
+              >
+                Remove
+              </button>
             </div>
           );
         })}
@@ -62,7 +76,7 @@ const CartItems = () => {
           <div className="cartitrm-total">
             <h1>Cart Total</h1>
 
-            <div className='cartitemdown-container'>
+            <div className="cartitemdown-container">
               <div className="cartitem-total-main">
                 <p>Subtotal</p>
                 <p>${getTotalCartAmount()}</p>
@@ -83,7 +97,7 @@ const CartItems = () => {
               </div>
 
               <Link to="/order">
-                <button className='checkout-page'>
+                <button className="checkout-page">
                   PROCEED TO CHECKOUT
                 </button>
               </Link>
@@ -94,7 +108,7 @@ const CartItems = () => {
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default CartItems
+export default CartItems;

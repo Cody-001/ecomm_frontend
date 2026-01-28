@@ -5,32 +5,47 @@ export const ShopContext = createContext(null);
 const ShopContextProvider = (props) => {
   const [allProduct, setAllProduct] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+   const [isAuth, setIsAuth] = useState(
+    !!localStorage.getItem("auth-token")
+  );
 
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-   
-    fetch(`${API_URL}/allproducts`)
-      .then(resp => resp.json())
-      .then(data => setAllProduct(data))
-      .catch(err => console.error("Failed to fetch all products:", err));
+  fetch(`${API_URL}/allproducts`)
+    .then(resp => resp.json())
+    .then(data => setAllProduct(data))
+    .catch(err => console.error("Failed to fetch all products:", err));
 
-  
-    if (localStorage.getItem("auth-token")) {
-      fetch(`${API_URL}/getcart`, {
+  const token = localStorage.getItem("auth-token");
+
+  if (!token) return;
+
+  const fetchCart = async () => {
+    try {
+      const resp = await fetch(`${API_URL}/getcart`, {
         method: "POST",
         headers: {
-          Accept: "application/json",
-          "auth-token": localStorage.getItem("auth-token"),
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ IMPORTANT
         },
-        body: JSON.stringify({}),
-      })
-        .then(resp => resp.json())
-        .then(data => setCartItems(data)) 
-        .catch(err => console.error("Failed to fetch cart:", err));
+      });
+
+      if (resp.status === 401) {
+        logout(); // 🔥 auto logout on expiry
+        return;
+      }
+
+      const data = await resp.json();
+      setCartItems(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to fetch cart:", err);
     }
-  }, [API_URL]);
+  };
+
+  fetchCart();
+}, [API_URL]);
+
 
   
   const addCart = (itemId, size, color) => {
@@ -70,10 +85,17 @@ const ShopContextProvider = (props) => {
     }, 0);
   };
 
-  // Total items
-  const getTotalCart = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-  };
+const getTotalCart = () => {
+  if (!Array.isArray(cartItems)) return 0;
+  return cartItems.reduce((total, item) => total + item.quantity, 0);
+};
+
+const logout = () => {
+  localStorage.removeItem("auth-token");
+  setIsAuth(false);
+  setCartItems([]); // reset cart
+};
+
 
   const contextValue = {
     allProduct,
@@ -81,7 +103,10 @@ const ShopContextProvider = (props) => {
     addCart,
     removeCart,
     getTotalCartAmount,
-    getTotalCart
+    getTotalCart,
+    isAuth, 
+    setIsAuth, 
+    logout,
   };
 
   return (
