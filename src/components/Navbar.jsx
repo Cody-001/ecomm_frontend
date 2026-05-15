@@ -1,50 +1,85 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../contexts/ShopContext";
 import logo from "../Assets/Frontend_Assets/logo.png";
 import cart_icon from "../Assets/Frontend_Assets/cart_icon.png";
-import arrow_icon from "../Assets/Frontend_Assets/arrow.png";
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import { IoClose } from "react-icons/io5";
 
 const Navbar = () => {
-  const [menu, setMenu] = useState("shop");
-  const { isAuth, logout, getTotalCart } = useContext(ShopContext);
+  const { isAuth, logout, cartItems, getTotalCart } = useContext(ShopContext);
+
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [activeMenu, setActiveMenu] = useState("home");
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    setCartCount(getTotalCart());
+  }, [cartItems, getTotalCart]);
+
+  const toggleMenu = () => setMobileMenu(prev => !prev);
+
+  const handleMenuClick = (menuName) => {
+    setActiveMenu(menuName);
+    setMobileMenu(false);
+  };
 
   return (
-    <div className="navbar" id="navbar">
+    <nav className="navbar">
+
       <div className="nav-logo">
-        <img src={logo} alt="" />
+        <img src={logo} alt="logo" />
         <p>SHOPPER</p>
       </div>
 
-      <ul className="nav-menu">
-        <li onClick={() => setMenu("home")}><Link to="/">Home</Link></li>
-        <li onClick={() => setMenu("mens")}><Link to="/mens">Men</Link></li>
-        <li onClick={() => setMenu("womens")}><Link to="/womens">Women</Link></li>
-        <li onClick={() => setMenu("kids")}><Link to="/kids">Kids</Link></li>
+      <ul className={`nav-menu ${mobileMenu ? "active" : ""}`}>
+        <li className={activeMenu === "home" ? "active-link" : ""} onClick={() => handleMenuClick("home")}>
+          <Link to="/">Home</Link>
+        </li>
+
+        <li className={activeMenu === "mens" ? "active-link" : ""} onClick={() => handleMenuClick("mens")}>
+          <Link to="/mens">Men</Link>
+        </li>
+
+        <li className={activeMenu === "womens" ? "active-link" : ""} onClick={() => handleMenuClick("womens")}>
+          <Link to="/womens">Women</Link>
+        </li>
+
+        <li className={activeMenu === "kids" ? "active-link" : ""} onClick={() => handleMenuClick("kids")}>
+          <Link to="/kids">Kids</Link>
+        </li>
       </ul>
 
-      <div className="min-screen-icon">
-        <span><img src={arrow_icon} alt="" /></span>
-      </div>
-
       <div className="nav-login-cart">
-        <Link to="/adminlogin"><button>Admin</button></Link>
+
+        <Link to="/adminlogin">
+          <button>Admin</button>
+        </Link>
 
         {isAuth ? (
           <button onClick={logout}>Logout</button>
         ) : (
-          <Link to="/login"><button>Login</button></Link>
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
         )}
 
-        <Link to="/cart">
-          <img src={cart_icon} alt="" />
+        <Link to="/cart" className="nav-cart">
+          <img src={cart_icon} alt="cart" />
+          <div className="nav-cart-count">{cartCount}</div>
         </Link>
 
-        <div className="nav-cart-count">{getTotalCart()}</div>
+        <div className="min-screen-icon" onClick={toggleMenu}>
+          {mobileMenu ? (
+            <IoClose className="toggle-icon" />
+          ) : (
+            <HiOutlineMenuAlt3 className="toggle-icon" />
+          )}
+        </div>
+
       </div>
 
-      <hr />
-    </div>
+    </nav>
   );
 };
 

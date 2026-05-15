@@ -110,8 +110,7 @@ const ProductsDisplay = (props) => {
                         Add To Cart
                     </button>
 
-                    <p className='display-right-category'><span className='cat'>Category:</span> <span>Women, t-shirt, crop Top</span></p>
-                    <p className='display-right-category'><span className='cat'>Category:</span> <span>Modern, Latest</span></p>
+                   
                 </div>
             </div>
             <Footer />
